@@ -18,6 +18,7 @@
         color: #e0e0e0;
         overflow: hidden;
       }
+
       .presentation {
         width: 100%;
         height: 100%;
@@ -25,25 +26,26 @@
         align-items: center;
         overflow: hidden;
         position: relative;
-        perspective: 1000px;
+        perspective: 2000px;
         background: radial-gradient(circle at center, #2c3e50, #1a1a1a);
       }
+
       .slides-container {
         display: flex;
-        padding: 0 5%;
         transform-style: preserve-3d;
         transition: transform 0.5s ease;
       }
+
       .slide {
         flex: 0 0 auto;
-        width: 80vw;
-        height: 70vh;
+        width: 50vw;
+        height: 50vh;
         background-color: rgba(255, 255, 255, 0.05);
         border-radius: 15px;
         padding: 40px;
         box-sizing: border-box;
         cursor: pointer;
-        transition: all 0.5s ease;
+        transition: all 1s ease;
         transform-origin: center center -500px;
         position: relative;
         z-index: 1;
@@ -52,21 +54,73 @@
         border: 1px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
         overflow: hidden;
-        margin-right: 10vw;
+        margin-right: 25vw;
       }
-      .slide h1,
-      .slide h2 {
+
+      .slide-content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.5s ease;
+      }
+
+      .zoomed-out {
+        opacity: 1;
+      }
+
+      .zoomed-in {
+        opacity: 0;
+      }
+
+      .slides-container.zoomed {
+        transform: translateZ(1300px);
+      }
+
+      .slides-container.zoomed .slide {
+        z-index: 100;
+      }
+
+      .slide.zoomed .zoomed-out {
+        opacity: 0;
+      }
+
+      .slide.zoomed .zoomed-in {
+        opacity: 1;
+        font-size: 0.5em;
+      }
+
+      .morph-group {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+
+      .morph-group.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      h1,
+      h2 {
         margin-bottom: 20px;
-        font-size: 2.5em;
+        font-size: 4em;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         color: #ffd700;
       }
-      .slide p,
-      .slide ul,
-      .slide ol {
+
+      p,
+      ul,
+      ol {
         font-size: 1.2em;
         margin: 10px 0;
       }
+
       .navigation-dots {
         position: fixed;
         bottom: 20px;
@@ -76,6 +130,7 @@
         gap: 10px;
         z-index: 101;
       }
+
       .dot {
         width: 12px;
         height: 12px;
@@ -84,15 +139,45 @@
         cursor: pointer;
         transition: all 0.3s ease;
       }
+
       .dot.active {
         background-color: #ffd700;
         transform: scale(1.2);
       }
-      .business-icon {
+
+      .background-animations {
         position: absolute;
-        opacity: 0.1;
-        transition: all 0.5s ease;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
       }
+
+      .keyword-container {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: start;
+        width: 200px;
+        height: 60px;
+        transition: all 10s ease;
+      }
+
+      .financial-symbol {
+        font-size: 28px;
+        color: rgba(255, 255, 255, 0.5);
+        text-align: center;
+      }
+
+      .network {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
       .network-dot {
         position: absolute;
         width: 4px;
@@ -100,123 +185,93 @@
         background-color: rgba(255, 255, 255, 0.5);
         border-radius: 50%;
       }
+
       .network-line {
         position: absolute;
         height: 1px;
         background-color: rgba(255, 255, 255, 0.2);
         transform-origin: 0 50%;
-      }
-
-      .financial-symbol {
-        position: absolute;
-        font-size: 15px;
-        opacity: 0;
-        animation: float 10s infinite;
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-20px);
-        }
-      }
-      @keyframes pulse {
-        0%,
-        100% {
-          transform: scale(1);
-        }
-        50% {
-          transform: scale(1.05);
-        }
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translate(0, 0);
-          opacity: 0;
-        }
-        25% {
-          opacity: 1;
-        }
-        75% {
-          opacity: 1;
-        }
-        50% {
-          transform: translate(var(--tx), var(--ty));
-        }
+        opacity: 0.5;
       }
     </style>
   </head>
   <body>
     <div class="presentation">
       <div class="background-animations">
-        <!-- Stock charts, financial symbols, and network will be added here by JavaScript -->
+        <!-- Keywords and network will be added here by JavaScript -->
       </div>
       <div class="slides-container">
         <div class="slide">
-          <h1>المطلب الأول</h1>
-          <h2>تعريف السمسرة</h2>
+          <div class="slide-content zoomed-out">
+            <h1>تعريف السمسرة</h1>
+          </div>
+          <div class="slide-content zoomed-in">
+            <h2 class="morph-group" data-morph-index="1">تعريف السمسرة</h2>
+            <div class="morph-group" data-morph-index="2">
+              <h3>الفرع الأول: التعريف اللغوي للسمسرة</h3>
+              <p>
+                السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية
+                معرّبة، استعملت في الجاهلية تعبيراً عن مهنة السمسار.
+              </p>
+            </div>
+            <div class="morph-group" data-morph-index="3">
+              <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
+            </div>
+            <ul class="morph-group" data-morph-index="4">
+              <li>الذي يبيع البُر للناس</li>
+              <li>القيّم على الشيء</li>
+              <li>السفير بين المحبّين</li>
+            </ul>
+          </div>
         </div>
         <div class="slide">
-          <h2>الفرع الأول: التعريف اللغوي للسمسرة</h2>
-          <p>
-            السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية معرّبة،
-            استعملت في الجاهلية تعبيراً عن مهنة السمسار.
-          </p>
-          <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
-          <ul>
-            <li>الذي يبيع البُر للناس</li>
-            <li>القيّم على الشيء</li>
-            <li>السفير بين المحبّين</li>
-          </ul>
-        </div>
-        <div class="slide">
-          <h2>الفرع الأول: التعريف اللغوي للسمسرة</h2>
-          <p>
-            السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية معرّبة،
-            استعملت في الجاهلية تعبيراً عن مهنة السمسار.
-          </p>
-          <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
-          <ul>
-            <li>الذي يبيع البُر للناس</li>
-            <li>القيّم على الشيء</li>
-            <li>السفير بين المحبّين</li>
-          </ul>
-        </div>
-        <div class="slide">
-          <h2>الفرع الأول: التعريف اللغوي للسمسرة</h2>
-          <p>
-            السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية معرّبة،
-            استعملت في الجاهلية تعبيراً عن مهنة السمسار.
-          </p>
-          <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
-          <ul>
-            <li>الذي يبيع البُر للناس</li>
-            <li>القيّم على الشيء</li>
-            <li>السفير بين المحبّين</li>
-          </ul>
-        </div>
-        <div class="slide">
-          <h2>الفرع الأول: التعريف اللغوي للسمسرة</h2>
-          <p>
-            السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية معرّبة،
-            استعملت في الجاهلية تعبيراً عن مهنة السمسار.
-          </p>
-          <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
-          <ul>
-            <li>الذي يبيع البُر للناس</li>
-            <li>القيّم على الشيء</li>
-            <li>السفير بين المحبّين</li>
-          </ul>
-        </div>
+          <div class="slide-content zoomed-out">
+            <h1>تعريف السمسرة</h1>
+          </div>
+          <div class="slide-content zoomed-in">
+            <h2 class="morph-group" data-morph-index="1">تعريف السمسرة</h2>
+            <div class="morph-group" data-morph-index="2">
+              <h3>الفرع الأول: التعريف اللغوي للسمسرة</h3>
+              <p>
+                السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية
+                معرّبة، استعملت في الجاهلية تعبيراً عن مهنة السمسار.
+              </p>
+            </div>
+            <div class="morph-group" data-morph-index="3">
+              <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
+            </div>
+            <ul class="morph-group" data-morph-index="4">
+              <li>الذي يبيع البُر للناس</li>
+              <li>القيّم على الشيء</li>
+              <li>السفير بين المحبّين</li>
+            </ul>
+          </div>
       </div>
+      <div class="slide">
+        <div class="slide-content zoomed-out">
+          <h1>تعريف السمسرة</h1>
+        </div>
+        <div class="slide-content zoomed-in">
+          <h2 class="morph-group" data-morph-index="1">تعريف السمسرة</h2>
+          <div class="morph-group" data-morph-index="2">
+            <h3>الفرع الأول: التعريف اللغوي للسمسرة</h3>
+            <p>
+              السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية
+              معرّبة، استعملت في الجاهلية تعبيراً عن مهنة السمسار.
+            </p>
+          </div>
+          <div class="morph-group" data-morph-index="3">
+            <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
+          </div>
+          <ul class="morph-group" data-morph-index="4">
+            <li>الذي يبيع البُر للناس</li>
+            <li>القيّم على الشيء</li>
+            <li>السفير بين المحبّين</li>
+          </ul>
+        </div>
+    </div>
     </div>
     <div class="navigation-dots"></div>
-
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         const presentation = document.querySelector(".presentation");
@@ -224,7 +279,8 @@
         const slides = Array.from(document.querySelectorAll(".slide"));
         const dotsContainer = document.querySelector(".navigation-dots");
         let currentSlide = 0;
-        let isZoomed = false;
+        let currentMorphGroup = 0;
+        let translateX;
 
         // Create navigation dots
         slides.forEach((_, index) => {
@@ -250,67 +306,103 @@
 
         function scrollToSlide(index) {
           currentSlide = index;
+          const allSlides = document.querySelectorAll('.slide')
+          const translateZ = "translateZ(-1300px)"
           const slideWidth =
             slides[0].offsetWidth +
             parseFloat(getComputedStyle(slides[0]).marginRight);
-          slidesContainer.style.transform = `translateX(${
-            index * slideWidth
-          }px) translateZ(-1300px)`;
+            translateX = `translateX(${
+              index * slideWidth
+          }px)`;
+            slidesContainer.style.transform = translateX + translateZ;
           updateDots();
         }
 
-        function animateIcons() {
-          const icons = document.querySelectorAll(".business-icon");
-          icons.forEach((icon, index) => {
-            icon.style.animation =
-              index % 2 === 0
-                ? "float 3s ease-in-out infinite"
-                : "pulse 3s ease-in-out infinite";
-          });
+        function zoomSlide(slide, zoom) {
+          console.log('zoomSlide', slide)
+          slide.classList.toggle("zoomed", zoom);
+          if (zoom) {
+            slidesContainer.style.transform = translateX + " translateZ(1300px)"
+            currentMorphGroup = 0;
+            revealNextMorphGroup(slide);
+          } else {
+            slidesContainer.style.transform = translateX + " translateZ(-1300px)"
+            resetMorphGroups(slide);
+          }
         }
 
-        function zoomSlide() {
-          if (!isZoomed) {
-            isZoomed = true;
-            slidesContainer.style.transform += " translateZ(1300px)";
+        function revealNextMorphGroup(slide) {
+          const morphGroups = slide.querySelectorAll(".morph-group");
+          if (currentMorphGroup < morphGroups.length) {
+            morphGroups[currentMorphGroup].classList.add("active");
+            currentMorphGroup++;
           } else {
-            isZoomed = false;
-            scrollToSlide(currentSlide);
+            // All morph groups revealed, move to next slide
+            setTimeout(() => {
+              zoomSlide(slide, false);
+            }, 1000);
+
+            setTimeout(() => {
+              scrollToSlide(Math.min(slides.length - 1, currentSlide + 1));
+            }, 1500);
           }
+        }
+
+        function resetMorphGroups(slide) {
+          slide.querySelectorAll(".morph-group").forEach((group) => {
+            group.classList.remove("active");
+          });
         }
 
         slides.forEach((slide, index) => {
           slide.addEventListener("click", () => {
-            if (index === currentSlide) {
-              zoomSlide();
+            if (slide.classList.contains("zoomed")) {
+              revealNextMorphGroup(slide);
             } else {
-              scrollToSlide(index);
+              zoomSlide(slide, true);
             }
           });
         });
 
         // Handle keyboard navigation
         document.addEventListener("keydown", (e) => {
-          if (isZoomed && e.key === "Escape") {
-            zoomSlide();
-          } else if (!isZoomed) {
-            if (e.key === "ArrowLeft") {
-              scrollToSlide(Math.min(slides.length - 1, currentSlide + 1));
-            } else if (e.key === "ArrowRight") {
-              scrollToSlide(Math.max(0, currentSlide - 1));
+          const currentSlideElement = slides[currentSlide];
+          if (
+            e.key === "Escape" &&
+            currentSlideElement.classList.contains("zoomed")
+          ) {
+            zoomSlide(currentSlideElement, false);
+          } 
+          if (e.key === "ArrowRight" && !currentSlideElement.classList.contains("zoomed")) {
+            scrollToSlide(Math.max(0, currentSlide - 1));
+          } 
+          if (e.key === "ArrowLeft" && !currentSlideElement.classList.contains("zoomed")) {
+            scrollToSlide(Math.min(slides.length - 1, currentSlide + 1));
+          } 
+          if (e.key === " ") {
+            if (currentSlideElement.classList.contains("zoomed")) {
+              revealNextMorphGroup(currentSlideElement);
+            } else {
+              zoomSlide(currentSlideElement, true);
+            }
+          } 
+          if (e.key === "Enter") {
+            if (currentSlideElement.classList.contains("zoomed")) {
+              revealNextMorphGroup(currentSlideElement);
+            } else {
+              zoomSlide(currentSlideElement, true);
             }
           }
         });
 
         // Initial setup
         scrollToSlide(0);
-        animateIcons();
 
         const backgroundAnimations = document.querySelector(
           ".background-animations"
         );
 
-        // Create financial symbols
+        // Create keywords with network
         const keywords = [
           "السمسرة",
           "الأسهم",
@@ -318,40 +410,77 @@
           "أسواق الأسهم",
           "أسواق الأولية",
           "أسواق الثانوية",
+          "Brokerage",
+          "Market",
+          "Stock",
+          "Shares",
+          "Broker",
+          "Trading",
+          "Investment",
+          "Finance",
+          "Economy",
+          "Business",
         ];
-        for (let i = 0; i < 10; i++) {
+
+        const keywordContainers = [];
+        const gridSize = 5; // 5x5 grid
+        const cellWidth = window.innerWidth / gridSize;
+        const cellHeight = window.innerHeight / gridSize;
+
+        for (let i = 0; i < gridSize * gridSize; i++) {
+          const container = document.createElement("div");
+          container.classList.add("keyword-container");
+
           const symbol = document.createElement("div");
           symbol.classList.add("financial-symbol");
           symbol.textContent =
             keywords[Math.floor(Math.random() * keywords.length)];
-          symbol.style.left = `${Math.random() * 100}%`;
-          symbol.style.top = `${Math.random() * 100}%`;
-          symbol.style.setProperty("--tx", `${(Math.random() - 0.5) * 100}px`);
-          symbol.style.setProperty("--ty", `${(Math.random() - 0.5) * 100}px`);
-          backgroundAnimations.appendChild(symbol);
+
+          container.appendChild(symbol);
+          backgroundAnimations.appendChild(container);
+          keywordContainers.push(container);
+
+          const row = Math.floor(i / gridSize);
+          const col = i % gridSize;
+          const x = col * cellWidth + Math.random() * (cellWidth - 100);
+          const y = row * cellHeight + Math.random() * (cellHeight - 100);
+
+          container.style.top = `${y}px`;
+          container.style.left = `${x}px`;
         }
+
+        function moveKeywords() {
+          keywordContainers.forEach((container, index) => {
+            const row = Math.floor(index / gridSize);
+            const col = index % gridSize;
+            const x = col * cellWidth + Math.random() * (cellWidth - 100);
+            const y = row * cellHeight + Math.random() * (cellHeight - 100);
+
+            container.style.top = `${y}px`;
+            container.style.left = `${x}px`;
+          });
+        }
+
+        // Move keywords every 10 seconds
+        setInterval(moveKeywords, 10000);
 
         // Create network effect
         const network = document.createElement("div");
         network.classList.add("network");
         backgroundAnimations.appendChild(network);
 
-        const dotCount = 25;
-        const dots = [];
-
-        for (let i = 0; i < dotCount; i++) {
+        const dots = keywordContainers.map(() => {
           const dot = document.createElement("div");
           dot.classList.add("network-dot");
-          dot.style.left = `${Math.random() * 100}%`;
-          dot.style.top = `${Math.random() * 100}%`;
           network.appendChild(dot);
-          dots.push(dot);
-        }
+          return dot;
+        });
 
         const lines = [];
-        for (let i = 0; i < dotCount; i++) {
-          for (let j = i + 1; j < dotCount; j++) {
-            if (Math.random() < 0.3) {
+        for (let i = 0; i < dots.length; i++) {
+          for (let j = i + 1; j < dots.length; j++) {
+            if (Math.random() < 0.2) {
+              // Reduced line density
               const line = document.createElement("div");
               line.classList.add("network-line");
               network.appendChild(line);
@@ -360,31 +489,67 @@
           }
         }
 
-        function updateNetworkLines() {
+        function updateNetworkPositions() {
+          const padding = 10; // Padding from the viewport edges
+
+          dots.forEach((dot, index) => {
+            const container = keywordContainers[index];
+            const rect = container.getBoundingClientRect();
+            const x = Math.min(
+              Math.max(rect.left + rect.width / 2, padding),
+              window.innerWidth - padding
+            );
+            const y = Math.min(
+              Math.max(rect.top + rect.height / 2, padding),
+              window.innerHeight - padding
+            );
+            dot.style.left = `${x}px`;
+            dot.style.top = `${y}px`;
+          });
+
           lines.forEach(({ line, start, end }) => {
             const rect1 = start.getBoundingClientRect();
             const rect2 = end.getBoundingClientRect();
-            const angle = Math.atan2(
-              rect2.top - rect1.top,
-              rect2.left - rect1.left
+            const x1 = Math.min(
+              Math.max(rect1.left, padding),
+              window.innerWidth - padding
             );
-            const length = Math.hypot(
-              rect2.top - rect1.top,
-              rect2.left - rect1.left
+            const y1 = Math.min(
+              Math.max(rect1.top, padding),
+              window.innerHeight - padding
+            );
+            const x2 = Math.min(
+              Math.max(rect2.left, padding),
+              window.innerWidth - padding
+            );
+            const y2 = Math.min(
+              Math.max(rect2.top, padding),
+              window.innerHeight - padding
             );
 
-            line.style.left = `${rect1.left + rect1.width / 2}px`;
-            line.style.top = `${rect1.top + rect1.height / 2}px`;
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            const length = Math.hypot(x2 - x1, y2 - y1);
+
+            line.style.left = `${x1}px`;
+            line.style.top = `${y1}px`;
             line.style.width = `${length}px`;
             line.style.transform = `rotate(${angle}rad)`;
           });
         }
 
-        // Initial update of network lines
-        updateNetworkLines();
+        // Update network positions periodically
+        setInterval(updateNetworkPositions, 1);
 
-        // Add window resize event listener to update network lines
-        window.addEventListener("resize", updateNetworkLines);
+        // Add window resize event listener to update positions
+        window.addEventListener("resize", () => {
+          const cellWidth = window.innerWidth / gridSize;
+          const cellHeight = window.innerHeight / gridSize;
+          moveKeywords();
+          updateNetworkPositions();
+        });
+
+        // Initial update
+        updateNetworkPositions();
       });
     </script>
   </body>
