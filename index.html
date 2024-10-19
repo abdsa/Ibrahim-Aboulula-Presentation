@@ -19,6 +19,10 @@
         overflow: hidden;
       }
 
+      h1 {
+        margin: 0;
+      }
+
       .presentation {
         width: 100%;
         height: 100%;
@@ -26,14 +30,14 @@
         align-items: center;
         overflow: hidden;
         position: relative;
-        perspective: 2000px;
+        perspective: 900px;
         background: radial-gradient(circle at center, #2c3e50, #1a1a1a);
       }
 
       .slides-container {
         display: flex;
         transform-style: preserve-3d;
-        transition: transform 0.5s ease;
+        transition: transform 1s ease;
       }
 
       .slide {
@@ -57,6 +61,10 @@
         margin-right: 25vw;
       }
 
+      .slide .slide-content.zoomed-in {
+        cursor: auto;
+      }
+
       .slide-content {
         position: absolute;
         top: 0;
@@ -67,58 +75,113 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: opacity 0.5s ease;
+        transition: all 0.5s ease;
+        padding: 20px;
+        box-sizing: border-box;
       }
 
-      .zoomed-out {
+      .slide-content.zoomed-in {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        transition: all 1s ease;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      .slide-title,
+      .slide-long-title {
+        font-size: 2.5em;
+        color: #ffd700;
+        text-align: center;
+        transition: all 0.5s ease;
+      }
+
+      .faq-content {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.5s ease;
+        overflow-y: auto;
+        max-height: calc(100% - 100px);
+      }
+
+      .faq-item {
+        margin-bottom: 15px;
+      }
+
+      .faq-answer {
+        display: grid;
+        grid-template-rows: 0fr;
+        opacity: 0;
+        overflow: hidden;
+        transition: max-height 0.5s ease-out, opacity 0.5s ease-out,
+          padding 0.5s ease-out, grid-template-rows 500ms;
+        padding: 0 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 5px;
+      }
+
+      .faq-answer.show {
+        grid-template-rows: 1fr;
+        max-width: 75ch;
         opacity: 1;
+        padding: 10px;
+        line-height: 1.5;
       }
 
-      .zoomed-in {
-        opacity: 0;
+      .faq-question {
+        position: relative;
+        font-size: 1.65em;
+        color: #ffd700;
+        cursor: pointer;
+        margin-bottom: 10px;
+        padding-right: 20px; /* Space for the toggle icon */
       }
 
-      .slides-container.zoomed {
-        transform: translateZ(1300px);
+      .faq-question::after {
+        content: "+";
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: transform 0.3s ease;
       }
 
-      .slides-container.zoomed .slide {
-        z-index: 100;
+      .faq-question.active::after {
+        transform: translateY(-50%) rotate(45deg);
       }
 
-      .slide.zoomed .zoomed-out {
-        opacity: 0;
-      }
-
-      .slide.zoomed .zoomed-in {
-        opacity: 1;
-        font-size: 0.5em;
-      }
-
-      .morph-group {
-        opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.5s ease, transform 0.5s ease;
-      }
-
-      .morph-group.active {
+      .zoomed-in .faq-content {
         opacity: 1;
         transform: translateY(0);
       }
 
-      h1,
-      h2 {
-        margin-bottom: 20px;
-        font-size: 4em;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        color: #ffd700;
+      .zoomed-out .slide-content {
+        justify-content: center;
       }
 
-      p,
-      ul,
-      ol {
-        font-size: 1.2em;
-        margin: 10px 0;
+      .zoomed-out .slide-title,
+      .zoomed-out .slide-long-title {
+        font-size: 4em;
+      }
+
+      .zoomed-in .slide-title {
+        transform: scale(0.8);
+        margin-bottom: 30px;
+      }
+
+      .zoomed-in .slide-long-title {
+        transform: scale(0.8);
+        margin-bottom: 40px;
       }
 
       .navigation-dots {
@@ -145,6 +208,7 @@
         transform: scale(1.2);
       }
 
+      /* Existing styles for background animations */
       .background-animations {
         position: absolute;
         top: 0;
@@ -198,89 +262,692 @@
   <body>
     <div class="presentation">
       <div class="background-animations">
-        <!-- Keywords and network will be added here by JavaScript -->
+        <!-- Background animations will be added here by JavaScript -->
       </div>
       <div class="slides-container">
         <div class="slide">
           <div class="slide-content zoomed-out">
-            <h1>تعريف السمسرة</h1>
-          </div>
-          <div class="slide-content zoomed-in">
-            <h2 class="morph-group" data-morph-index="1">تعريف السمسرة</h2>
-            <div class="morph-group" data-morph-index="2">
-              <h3>الفرع الأول: التعريف اللغوي للسمسرة</h3>
-              <p>
-                السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية
-                معرّبة، استعملت في الجاهلية تعبيراً عن مهنة السمسار.
-              </p>
+            <h1 class="slide-title">تعلميات استعمال العرض</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">إخفاء محتوى العنوان</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    يمكنكم النقر على العنوان الذي تريد لإخفاء محتواه وعرضه مرة
+                    أخرى .
+
+                    <br />
+                    <br />
+
+                    (يمكنكم النقر على العنوان "إخفاء محتوى العنوان" للتجربة)
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">التنقل بين السلايدات</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    <ol style="margin: 0">
+                      <li>يمكنكم النقر على السلايد الذي تريدون عرضه.</li>
+                      <li>
+                        يمكنكم النقر على الدوائر الصغيرة في الأسفل للتنقل بين
+                        السلايدات.
+                      </li>
+                      <li>
+                        يمكنكم الضغط على مفاتيح الأسهم للتنقل بين السلايدات فقط
+                        خارج السلايدات.
+                      </li>
+                      <li>
+                        يمكنكم الضغط على مفتاح المسافة أو الإنتر للدخول إلى
+                        السلايد والخروج منه.
+                      </li>
+                      <li>يمكنكم الضغط على مفتاح Esc للخروج من السلايد.</li>
+                    </ol>
+
+                    <br />
+
+                    ختاما، يرجى التأني في تعاملكم مع العرض. والله الموفق.
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="morph-group" data-morph-index="3">
-              <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
-            </div>
-            <ul class="morph-group" data-morph-index="4">
-              <li>الذي يبيع البُر للناس</li>
-              <li>القيّم على الشيء</li>
-              <li>السفير بين المحبّين</li>
-            </ul>
           </div>
         </div>
         <div class="slide">
           <div class="slide-content zoomed-out">
-            <h1>تعريف السمسرة</h1>
-          </div>
-          <div class="slide-content zoomed-in">
-            <h2 class="morph-group" data-morph-index="1">تعريف السمسرة</h2>
-            <div class="morph-group" data-morph-index="2">
-              <h3>الفرع الأول: التعريف اللغوي للسمسرة</h3>
-              <p>
-                السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية
-                معرّبة، استعملت في الجاهلية تعبيراً عن مهنة السمسار.
-              </p>
+            <h1 class="slide-title">أسواق الأسهم</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">السوق الأولية</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    سوق الإصدار الأول للأوراق والأدوات المالية، بهدف تمويل
+                    المشاريع التجارية، عن طريق الاكتتاب المغلق أو العام في ذلك
+                    الإصدار من قبل أفراد مستقلين أو كيانات مشتركة.
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">السوق الثانوية</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    سوق التداول للأدوات والأوراق المالية المصدرة في السوق
+                    الأولية (سوق الإصدار)، ويكون التداول فيها بين حملة الأوراق
+                    والمضاربين فيها، دون تدخل تنظيمي من الشركة المصدرة.
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="morph-group" data-morph-index="3">
-              <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
-            </div>
-            <ul class="morph-group" data-morph-index="4">
-              <li>الذي يبيع البُر للناس</li>
-              <li>القيّم على الشيء</li>
-              <li>السفير بين المحبّين</li>
-            </ul>
           </div>
+        </div>
+        <div class="slide">
+          <div class="slide-content zoomed-out">
+            <h1 class="slide-title">إجراءات السوق</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">السمسرة</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    مساعي الوسطاء المعتمدين للتوصل إلى تنفيذ عقود البيع، والرهن،
+                    أو التنازل عن طريق الإهداء، لأسهم الشركات، والشهادات المؤقتة
+                    التي تمثل الأسهم والسندات، ومعاملات الأداء في أي أوراق مالية
+                    نيابة عن الآخرين؛ أو أي وظائف أخرى قد يحددها مجلس الإدارة،
+                    مقابل عمولة.
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">الحكم الشرعي للسمسرة</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    السمسرة من العقود الجائزة شرعاً، وكانت معروفة منذ القدم،
+                    وخاصةً في عهد النبوة والقرون المفضلة الأولى، وقد استدل على
+                    جوازها من الكتاب والسنة والإجماع القرآن: قوله تعالى: "قالوا
+                    نفقد صواع الملك ولمن جاء به حمل بعير" وقوله تعالى: "وتعاونوا
+                    على البر والتقوى" السنة: "كنّا نُدعى السَّماسِرة فسمّانا
+                    رسول الله صلى الله عليه وسلم تُجَّاراً"، "نهى رسول الله صلى
+                    الله ليه وسلم أن يبيع حاضر لباد"
+                    <br />
+                    الإجماع: لم ينقل عن الفقهاء عدم جواز السمسرة، بل نُقل جواز
+                    السمسرة عن عدد من السلف والأئمة.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="slide-content zoomed-out">
+            <h1 class="slide-title">أوامر البورصة</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">أنواع أوامر البورصة</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    <ol>
+                      <li>الأوامر من حيث تحديد السعر، أو عدمه:</li>
+                      <ol
+                        style="list-style-type: lower-alpha; padding-bottom: 0"
+                      >
+                        <li style="margin-left: 2em">
+                          الأمر السوقي (Market Order)
+                        </li>
+                        <li style="margin-left: 2em; padding-bottom: 0">
+                          أمر موقوف بالبيع أو الشراء (Stop Loss/Buy Order)
+                        </li>
+                      </ol>
+                      <li>الأوامر من حيث التأقيت:</li>
+                      <ol
+                        style="list-style-type: lower-alpha; padding-bottom: 0"
+                      >
+                        <li style="margin-left: 2em">
+                          الأمر المحدد بيوم، أو أسبوع، أو شهر (Day or Week or
+                          Month Limited)
+                        </li>
+                        <li style="margin-left: 2em; padding-bottom: 0">
+                          أمر مفتوح المدة (Open Order)
+                        </li>
+                      </ol>
+                      <li>الأوامر من حيث الحجم:</li>
+                      <ol
+                        style="list-style-type: lower-alpha; padding-bottom: 0"
+                      >
+                        <li style="margin-left: 2em">أوامر كسرية (Odd Lots)</li>
+                        <li style="margin-left: 2em; padding-bottom: 0">
+                          أوامر غير كسرية (Round Lots)
+                        </li>
+                      </ol>
+                      <li>الأوامر من حيث الأوامر من حيث الشروط المقرونة:</li>
+                      <ol
+                        style="list-style-type: lower-alpha; padding-bottom: 0"
+                      >
+                        <li style="margin-left: 2em">
+                          أوامر أمر محدد السعر خلال فترة معينة (Specific order
+                          during a certain period)
+                        </li>
+                        <li style="margin-left: 2em; padding-bottom: 0">
+                          أمر للكل أو الجزء (All or any part order)
+                        </li>
+                      </ol>
+                      <li>الأمر المطلق</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">الحكم الشرعي لأوامر البورصة</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    أوامر البورصة هي تلك التعليمات التي يلقيها صاحب الحق للسمسار
+                    لينفذ صفقات وفقاً لما يريد وإذا جاز عمل السمسار فتجوز أوامر
+                    البورصة ما لم تكن أمرا ببيع محرم وتكون من قبيل الوكالة
+                    الجائزة شرعاً قال صلى الله عليه وسلم : "المسلمون على شروطهم"
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="slide-content zoomed-out">
+            <h1 class="slide-title">سداد الصفقات</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">أساليب سداد قيمة الصفقات</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    <ul>
+                      <li>أسلوب النقد الكلّي (Cash Settlement)</li>
+                      <li>أسلوب التسليم الأسلوب النقدي الجزئي:</li>
+                      <ul>
+                        <li style="margin-left: 2em">
+                          الشراء بالهامش (Margin Buying): يقوم العميل بتمويل جزء
+                          من مشترياته نقداً بينما يسدد الباقِ بضمان الأوراق محلّ
+                          الصفقة، وتستخدم قيمة المدفوعات النقدية هامش مبدئي
+                          لصفقة الشراء، وفي ظل هذا النوع من المعاملات يفتح
+                          العميل حساباً للهامش لدى السمسار، وبمقتضى اتفاق خاص
+                          يقوم السمسار بالحصول على قرض من البنك لتغطية الفرق بين
+                          قيمة الصفقة وبين القيمة المدفوعة كهامش، على أن توضع
+                          الأوراق محلّ الصفقة كرهن لسداد قيمة القرض، كما يتم
+                          تسجيل الأوراق المشتراة باسم السمسار وليس باسم العميل،
+                          وعادة ما يحدد البنك المركزي نسبة الهامش، ويجوز لإدارة
+                          السوق زيادتها، كما يمكن للسمسار أن يطلب نسبة تفوق
+                          النسبة التي حددتها إدارة السوق. وفي صورة أخرى يكون
+                          التعامل فيها مع شركة مالية لإدارة المحافظ، فتقوم
+                          بإقراض العميل قرضاً حسناً على أن يقوم باستخدام المبلغ
+                          من خلالها، أو المتاجرة فيه معها
+                        </li>
+                        <li style="margin-left: 2em; padding-bottom: 0">
+                          البيع على المكشوف (Short Selling): يتم بيع أوراق مالية
+                          لا يملكها البائع وقت البيع، ويتم التسليم الفعلي بواسطة
+                          أوراق مقترضة من السمسار، ثم تشترى هذه الأوراق فيما بعد
+                          عندما تنخفض قيمتها السوقية عن القيمة التي سبق أن بيعت
+                          بها، وهذا النوع من المعاملات مرهون بتوقع البائع وغالبا
+                          ما يحدث توقعه فتنخفض القيمة السوقية للأوراق المالية
+                          محلّ الصفقة، وإذا حدث العكس واتجهت الأسعار للارتفاع
+                          واقترب موعد التسليم فإنّ ذلك من شأنه أن يعرّض المستثمر
+                          لخسائر فادحة لا يقوى عليها المستثمر العادي
+                        </li>
+                      </ul>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">
+                  الحكم الشرعي لأساليب سداد الصفقات
+                </div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    أسلوب النقد الكلّي (Cash Settlement):
+                    <br />
+                    لا غبار عليه شرعاً طالما أنّ الأوراق المالية محلّ التعامل
+                    مباحة شرعاً
+                    <br />
+                    الأسلوب النقدي الجزئي:
+                    <br />
+                    أولاً: الشراء بالهامش (Margin Buying):
+                    <br />
+                    حكمها وهو الحرمة، لأنّ فيها قرضاً بفائدة، فالعميل يدفع فائدة
+                    ربوية للسمسار، والسمسار يدفع للبنك كذلك فائدة ربوية، ولا
+                    خلاف على حرمة الربا
+                    <br />
+                    ثانياً: البيع على المكشوف (Short Selling):
+                    <br />
+                    الطريقة المتعارف عليها: محرمة من ثلاثة وجوه:
+                    <br />
+                    الأول: اشتماله على قرض بربا، لأن المقرض (الشركة المالية)
+                    تقرض العميل الأسهم، وعليها فائدة ربوية من قيمة الأسهم.
+                    <br />
+                    الثاني: المقترض (العميل) باع ما لم يملك، أو ما اشتره قبل أن
+                    يملكه، وكلاهما محرّم.
+                    <br />
+                    الثالث: المقرض يشترط على العميل عدم الاستفادة من مبلغ الأسهم
+                    التي بيعت وأودع في حسابه، ويلزمه بأن يقرض الشركة ذلك المبلغ،
+                    وهذا صورة أسلفني وأسلفك، وهذا محرّم.
+                    <br />أما الصورة الجائزة لذلك هي: البيع مرابحة، إذ يتم البيع
+                    بالسعر السوقي للأسهم مع ربح إلى أجل؛ وتنتقل الملكية نقلا
+                    كاملاً إلى المشتري، ويبقى سعر البيع ديناً في ذمته للبائع
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="slide-content zoomed-out">
+            <h1 class="slide-long-title">
+              أحكام المتاجرة في أسهم الشركات القائمة على أنشطة مباحة
+            </h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">
+                  مشروعية الشركات المساهمة والمتاجرة بأسهمها
+                </div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    الشركات المساهمة الحديثة: إذا كانت قائمة على أنشطة مباحة
+                    ولها رأس مال حلال، فهي شركات جائزة شرعاً، لأن لها معنى
+                    الشركة، فالشركاء يقدّمون أسهمهم حصصاً في رأس المال،
+                    ويتقاسمون الأرباح والخسائر كل بحسب أسهمه، فيكونون شركاء
+                    فيها، وقد استُدلّ على جواز هذه الشركات بعموم الأدلة الواردة
+                    في مشروعية الشركة وقد نُقل الإجماع عن جمع من أهل العلم رحمهم
+                    على جواز المشاركة في التجارة.
+
+                    <br />
+
+                    المتاجرة بأسهمها: قال تعالى: "وأحل الله البيع وحرم الربا"
+                    وقوله تعالى: "إلا أن تكون تجارة حاضرة تديرونها بينكم"،
+                    وقوله: "إلا أن تكون تجارة عن تراض منكم"، وقوله صلى الله عليه
+                    وسلم: "إن التجار يبعثون يوم القيامة فجّاراً، إلّا من اتقى
+                    وبرّ وصدق" فالتجارة في عمومها جائزة ما لم يرد النص على معين
+                    بالتحريم وأجمع أهل العلم رحمهم الله على جواز بيع المشاع
+                    والشركات المساهمة تجري عليه أحكام شركة العنان والمضاربة،
+                    إلّا أنّها أضيفت إليها بعض الشروط التنظيمية، وما دامت هذه
+                    الشروط لا تخالف أصلاً شرعياً، ولا تتصادم مع المبادئ
+                    الإسلامية، فلا يوجد ما يمنع المتاجرة بالأسهم
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">
+                  المتاجرة بأسهم شركة موجوداتها أعيان ومنافع
+                </div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    هذه الحالة تكون بعد تشغيل الشركة وتحويل حصيلة الاكتتاب إلى
+                    أعيان، كالمعدّات والآلات، وغيرها من الأصول، وهذه الحالة
+                    يعبّر عنها الفقهاء (عروض التجارة)، وأما المنافع فهي الفائدة
+                    العرضية من الأعيان كركوب السيارة وعمل العامل، وسواءً كانت
+                    موجوداتها أعياناً فقط، أو منافع فقط، أو أعياناً ومنافع، يجوز
+                    المتاجرة بأسهمها كنوع من البيع والشراء، ولا يتعلّق بها أي
+                    شروط سوى شروط البيع المعروفة.
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">
+                  المتاجرة بأسهم شركة موجوداتها نقود
+                </div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    هذه الصورة لا يجوز تداول الأسهم إلّا بشرط تطبيق أحكام الصرف
+
+                    <br />
+
+                    أولا: الموجودات أموالٌ من نفس جنس رأس المال، كأن تكون
+                    الأموال كلّها بالدينار البحريني، فلابد من تحقق شرطي الصرف:
+                    التماثل والتقابض ثانياً: الموجودات أموالاً من غير جنس رأس
+                    المال، لكن تتحدّ معه في نفس العلّة الربوية، كأن تكون ريالات
+                    قطرية ورأس المال دنانير بحرينية، فإنّه يشترط التقابض فقط
+
+                    <br />
+
+                    وعلى ذلك فإن السهم يباع بالقيمة الاسمية دون زيادة أو نقص
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">
+                  المتاجرة بأسهم شركة موجوداتها ديون
+                </div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    تكون الأسهم ديوناً، فلا يجوز بيع الدين من غير من هو عليه
+                    بثمن حاضر إلّا بشروط:
+
+                    <ol>
+                      <li>ألّا يتفق العوضان (الدين وعوضه) في العلّة الربوية</li>
+                      <li>
+                        ألّا يربح الدائن من البيع، فله أن يبيع بنفس القيمة أو
+                        أقل
+                      </li>
+                      <li>أن يكون أحد العوضين حالاً، وهو ثمن المبايعة</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">
+                  المتاجرة بأسهم شركة موجوداتها أخلاطاً
+                </div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    يجوز تداول الأسهم مع عدم مراعاة أحكام الصرف، وأحكام بيع
+                    الديون، إذا كانت الموجودات مختلطة، بشرط:
+
+                    <br />
+
+                    <ol style="list-style-type: lower-alpha; padding-bottom: 0">
+                      <li style="padding-bottom: 0">
+                        أن يكون النشاط الذي أنشئت من أجله الشركة الاستثمار في
+                        عروض التجارة وليس في الصرف والديون.
+                      </li>
+                      <li>ألّا تخلوا موجودات الشركة من الأعيان والمنافع.</li>
+                      <li>
+                        ألّا يتم التداول حتّى تباشر الشركة النشاط في الأعيان
+                        والمنافع، وأما قبل ذلك فيؤخذ أحكام الصرف والديون.
+                      </li>
+                      <li>
+                        ألا تقل الأعيان والمنافع عن الثلث من موجودات الشركة،
+                        وتكون الديون والنقود ناشئة عن الأعيان والمنافع.
+                      </li>
+                      <li>ألّا يكون ذلك ذريعة أو وسيلة للتحايل على الربا.</li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="slide-content zoomed-out">
+            <h1 class="slide-long-title">المتاجرة في أسهم الشركات المختلطة</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">التعريف بالشركات المختلطة</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    شركات ذات نشاط أصله مباح؛ إلا أنه يشوبها تعاملات محرمة إما
+                    بتمويل أو متاجرة
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">أحكام أسهم الشركات المختلطة</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    أولا: التحريم
+
+                    <br />
+
+                    ثانياً: الإباحة بشروط الراجح والله أعلم القول الثاني،
+                    وشروطه:
+
+                    <br />
+
+                    <ol>
+                      <li>
+                        أن يكون التعامل بأسهم تلك الشركات للحاجة، ومما يحتاج
+                        إليه المجتمع من خدمات عامة تقدمها تلك الشركات
+                      </li>
+                      <li>
+                        ألا يُشَارَكَ في تأسيس الشركات التي تنص في نظامها أو
+                        خطتها على تعامل بالحرام
+                      </li>
+                      <li>
+                        ألا تزيد نسبة القروض الربوية على الشركة بفوائدها عن
+                        (30%)
+                      </li>
+                      <li>
+                        ألا يتجاوز مقدار الإيراد الناتج من العنصر المحرم (5%)
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="slide-content zoomed-out">
+            <h1 class="slide-title">زكاة الأسهم</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">حكم زكاة الأسهم</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    بما أن السهم كما سبق حصة الشريك في رأس مال الشركة، فهي بهذا
+                    الاعتبار داخلة في الوعاء الزكوي
+
+                    <br />
+
+                    شروط زكاة الأسهم:
+
+                    <br />
+                    <ul>
+                      <li>الإسلام</li>
+                      <li>الحرية</li>
+                      <li>ملك النصاب</li>
+                      <li>الملك التام</li>
+                      <li>الحول</li>
+                      <li>أثر الخلطة بين أموال المساهمين في الزكاة</li>
+                    </ul>
+
+                    <br />
+
+                    صدر قرار مجمع الفقه الإسلامي الدولي قرار المجمع
+                    (رقم:3د/08/88)، وملخّصه أن المساهم يزكّي مُساهمته في نهاية
+                    السنة المالية للشركة، وليس عند حولان حوله الخاص، وكما أنّ
+                    الحصص إذا لم تبلغ نصاباً بمفردها لا تعفى من الزكاة
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">من يجب عليه إخراج زكاة الأسهم</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    المساهم بنية الاستثمار:
+
+                    <br />
+
+                    <ol>
+                      <li>هو المكلّف بالخطاب الشرعيّ.</li>
+                      <li>
+                        مقدار الزكاة يختلف باختلاف نية المالك للأسهم، فقد ينوي
+                        أن تكون للمتاجرة بها، أو للاستثمار في الشركة.
+                      </li>
+                      <li>
+                        الشركة تخرج الزكاة عن المساهمين سقط الواجب عن المساهم.
+                      </li>
+                    </ol>
+
+                    <br />
+
+                    إذا لم تخرج الشركة الزكاة حالات:
+
+                    <ol>
+                      <li>
+                        يتمكن المساهمون من الوصول إلى البيانات المالية، وكل ما
+                        يتعلق بأسهمهم، أو أنّ الشركة أفصحت عن المقدار الواجب في
+                        كل سهم، فإنّه يجب على المساهم أن يخرج زكاة نصيبه بناءً
+                        على المعلومات التي توصّل إليها.
+                      </li>
+                      <li>
+                        عدم تمكّن المساهمين من الوصول إلى المعلومات المتعلقة
+                        بمقدار زكاتهم: لا زكاة عليه في أصل السهم، وإنّما تجب في
+                        الريع والذي يضم إلى الوعاء الزكوي للمساهم.
+                      </li>
+                    </ol>
+
+                    <br />
+
+                    المساهم بنية المضاربة وليس الاستثمار:
+
+                    <br />
+
+                    يزكّيها زكاة عروض التجارة، فإذا جاء حول زكاته وهي في ملكه،
+                    زكّى قيمتها السوقية، وإن لم يكن لها سوق، زكّى قيمتها بتقويم
+                    الخبراء، فيخرج ربع العشر من القيمة، ومن الربح إن كان لها
+                    عائد ربحي إن لم تخرجه الشركة.
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">كيفية إخراج زكاة الأسهم</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    <ul>
+                      <li>
+                        إذا كانت نية المساهم المتاجرة في الأسهم فإنّه يخرج زكاة
+                        أسهمه عروض تجارة ففيها ربع العشر من القيمة السوقية
+                        مضافاً إليها أرباح الأسهم إن وجدت
+                      </li>
+                      <li>
+                        إذا أخرجت الشركة زكاة الأسهم نيابة عن المساهم المتاجر
+                        بها، فإنّه لا يخلو الأمر عن ثلاثة احتمالات:
+                      </li>
+                      <ul
+                        style="list-style-type: lower-alpha; padding-bottom: 0"
+                      >
+                        <li style="margin-left: 2em">
+                          الاحتمال الأول: أن يكون ما أخرجته الشركة مماثلاً للقدر
+                          الواجب عليه في الزكاة، فتبرأ ذمته ويحسمها من وعائه
+                          الزكوي.
+                        </li>
+                        <li style="margin-left: 2em">
+                          الاحتمال الثاني: أن يكون ما أخرجته الشركة أقلّ من
+                          القدر الواجب عليه، فلا تبرأ ذمته حتى يخرج ما تبقى عليه
+                          من الزكاة.
+                        </li>
+                        <li style="margin-left: 2em; padding-bottom: 0">
+                          الاحتمال الثالث: أن يكون ما أخرجته الشركة أعلى من
+                          القدر الواجب عليه في الزكاة، فإنه يحسم من وعائه الزكوي
+                          مقدارها والفرق الزائد.
+                        </li>
+                      </ul>
+                      <li>
+                        إذا كانت نيّة المساهم الاستثمار في مجال الشركة والإفادة
+                        من أرباحها، فإنّه يخرج زكاة أسهمه بحسب نوع الشركة ومجال
+                        استثمارها حسب القيمة الحقيقية للأسهم، وإن لم يستطع معرفة
+                        ذلك فإنّه يزكّي بناء على القيمة السوقية.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <div class="faq-item">
+                <div class="faq-question">حالات عملية لإخراج الزكاة</div>
+                <div class="faq-answer">
+                  <div style="overflow: hidden">
+                    <ul>
+                      <li>
+                        حالة المتاجر في الأسهم: لنفرض أنّ زيداً تملّك 15000 سهم
+                        في شركة مساهمة مباحة بنية المتاجرة، وكانت القيمة الاسمية
+                        للسهم وقت حلول الزكاة 0.350 فلس، والقيمة السوقية وقت
+                        الزكاة 1.5 دينار، وبلغت الأرباح التي تحصّل عليها كلّ سهم
+                        0.150 فلس، فتكون زكاته زكاة عروض التجارة مجموعاً إليها
+                        الأرباح المتحصّلة من السهم الواحد: الزكاة الواجبة =
+                        (القيمة السوقية للسهم + ربح السهم) × عدد الأسهم × (2.5)
+                        % (1.5 + 0.150) × 15000 × 2.5 ÷ 100 = 618.75 دينار
+                      </li>
+                      <br />
+                      <li>
+                        حالة التاجر المستثمر الذي لم يعرف مقدار الزكاة الواجبة
+                        عليه ولم تخرج عنه الشركة الزكاة: لنفرض أنّ عمْرواً يمتلك
+                        20000 سهم في شركة مساهمة مباحة تتاجر في الأدوات
+                        الكهربائية، ولا يعرف مقدار زكاته لعدم إفصاح الشركة بأي
+                        بيانات، وكانت القيمة السوقية للسهم بعد حولان الحول 1.2
+                        دينار، فإنّه يزكّي زكاة عروض التجارة على أساس القيمة
+                        الاسمية، فإن كان يعلم بمقدار الأرباح للسهم الواحد فإنّه
+                        يجمعها إلى القيمة الاسمية ويطبّق عليها معادلة الحالة
+                        السابقة.
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="slide">
+          <div class="slide-content zoomed-out">
+            <h1 class="slide-title">تطبيقات للأسهم محرمة</h1>
+            <div class="faq-content">
+              <div class="faq-item">
+                <div class="faq-question">تطبيقات للأسهم محرمة</div>
+                <div class="faq-answer">
+                  <ul>
+                    <li>أسهم الامتياز (Preference Shares)</li>
+                    <li>أسهم التمتع (Redeemable Shares)</li>
+                    <li>
+                      العقود الآجلة والمستقبليات (Forward Contracts & Futures)
+                    </li>
+                    <li>عقود الخيارات (Option Contracts)</li>
+                    <li>التوريق (securitization)</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="slide">
-        <div class="slide-content zoomed-out">
-          <h1>تعريف السمسرة</h1>
-        </div>
-        <div class="slide-content zoomed-in">
-          <h2 class="morph-group" data-morph-index="1">تعريف السمسرة</h2>
-          <div class="morph-group" data-morph-index="2">
-            <h3>الفرع الأول: التعريف اللغوي للسمسرة</h3>
-            <p>
-              السمسرة، والسّمسار، والجمع سماسرة، والمصدر سمسر، كلمة فارسية
-              معرّبة، استعملت في الجاهلية تعبيراً عن مهنة السمسار.
-            </p>
-          </div>
-          <div class="morph-group" data-morph-index="3">
-            <p>السمسار هو: الذي يتوسط بين البائع والمشتري لإمضاء البيع.</p>
-          </div>
-          <ul class="morph-group" data-morph-index="4">
-            <li>الذي يبيع البُر للناس</li>
-            <li>القيّم على الشيء</li>
-            <li>السفير بين المحبّين</li>
-          </ul>
-        </div>
-    </div>
     </div>
     <div class="navigation-dots"></div>
+
     <script>
       document.addEventListener("DOMContentLoaded", function () {
+        const style = document.createElement("style");
+        style.textContent = `
+    .exit-link {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .zoomed-in .exit-link {
+      opacity: 1;
+    }
+    .exit-button {
+      color: #ffd700;
+      text-decoration: none;
+      font-size: 1.2em;
+      transition: color 0.3s ease;
+    }
+    .exit-button:hover {
+      color: #ffffff;
+    }
+  `;
+        document.head.appendChild(style);
+
+        // Function to create and append exit button
+        function addExitButton(slide) {
+          const exitLink = document.createElement("div");
+          exitLink.className = "exit-link";
+          exitLink.innerHTML = '<a href="#" class="exit-button">الخروج ￩</a>';
+          slide.appendChild(exitLink);
+
+          exitLink
+            .querySelector(".exit-button")
+            .addEventListener("click", function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              toggleZoom(slide);
+            });
+        }
+
+        // Add exit button to all existing slides
+        document.querySelectorAll(".slide").forEach(addExitButton);
+
         const presentation = document.querySelector(".presentation");
         const slidesContainer = document.querySelector(".slides-container");
         const slides = Array.from(document.querySelectorAll(".slide"));
         const dotsContainer = document.querySelector(".navigation-dots");
         let currentSlide = 0;
-        let currentMorphGroup = 0;
-        let translateX;
+        let isZoomed = false;
+        let translateX = "";
 
         // Create navigation dots
         slides.forEach((_, index) => {
@@ -290,107 +957,130 @@
           dotsContainer.appendChild(dot);
         });
 
-        document.querySelectorAll(".dot").forEach((dot, index) => {
-          index % 2 !== 0
-            ? (dot.style.display = "none")
-            : (dot.style.display = "block");
-        });
-
         function updateDots() {
-          if (currentSlide % 2 === 0) {
-            document.querySelectorAll(".dot").forEach((dot, index) => {
-              dot.classList.toggle("active", index === currentSlide);
-            });
-          }
+          document.querySelectorAll(".dot").forEach((dot, index) => {
+            dot.classList.toggle("active", index === currentSlide);
+          });
         }
 
         function scrollToSlide(index) {
+          if (isZoomed) return;
           currentSlide = index;
-          const allSlides = document.querySelectorAll('.slide')
-          const translateZ = "translateZ(-1300px)"
           const slideWidth =
             slides[0].offsetWidth +
             parseFloat(getComputedStyle(slides[0]).marginRight);
-            translateX = `translateX(${
-              index * slideWidth
-          }px)`;
-            slidesContainer.style.transform = translateX + translateZ;
+          translateX = `translateX(${index * slideWidth}px)`;
+          slidesContainer.style.transform = translateX + " translateZ(-1000px)";
           updateDots();
-        }
-
-        function zoomSlide(slide, zoom) {
-          console.log('zoomSlide', slide)
-          slide.classList.toggle("zoomed", zoom);
-          if (zoom) {
-            slidesContainer.style.transform = translateX + " translateZ(1300px)"
-            currentMorphGroup = 0;
-            revealNextMorphGroup(slide);
-          } else {
-            slidesContainer.style.transform = translateX + " translateZ(-1300px)"
-            resetMorphGroups(slide);
-          }
-        }
-
-        function revealNextMorphGroup(slide) {
-          const morphGroups = slide.querySelectorAll(".morph-group");
-          if (currentMorphGroup < morphGroups.length) {
-            morphGroups[currentMorphGroup].classList.add("active");
-            currentMorphGroup++;
-          } else {
-            // All morph groups revealed, move to next slide
-            setTimeout(() => {
-              zoomSlide(slide, false);
-            }, 1000);
-
-            setTimeout(() => {
-              scrollToSlide(Math.min(slides.length - 1, currentSlide + 1));
-            }, 1500);
-          }
-        }
-
-        function resetMorphGroups(slide) {
-          slide.querySelectorAll(".morph-group").forEach((group) => {
-            group.classList.remove("active");
-          });
         }
 
         slides.forEach((slide, index) => {
           slide.addEventListener("click", () => {
-            if (slide.classList.contains("zoomed")) {
-              revealNextMorphGroup(slide);
-            } else {
-              zoomSlide(slide, true);
+            scrollToSlide(index);
+            if (!isZoomed) {
+              toggleZoom(slide);
             }
+          });
+
+          const faqQuestions = slide.querySelectorAll(".faq-question");
+          faqQuestions.forEach((question) => {
+            question.addEventListener("click", (e) => {
+              e.stopPropagation();
+              const answer = question.nextElementSibling;
+
+              // Toggle the clicked answer
+              answer.classList.toggle("show");
+              question.classList.toggle("active");
+
+              // Smooth scroll to the answer if it's opening
+              if (answer.classList.contains("show")) {
+                setTimeout(() => {
+                  answer.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                  });
+                }, 100);
+              }
+            });
           });
         });
 
+        // Update the toggleZoom function to include the new animations
+
+        function toggleZoom(slide) {
+          const content = slide.querySelector(".slide-content");
+          isZoomed = !isZoomed;
+
+          if (isZoomed) {
+            content.classList.remove("zoomed-out");
+            content.classList.add("zoomed-in");
+            slidesContainer.style.transform =
+              translateX + " translateZ(457px)";
+            slide.querySelector(".faq-content").style.display = "flex";
+            setTimeout(() => {
+              slide.querySelector(".faq-content").style.opacity = "1";
+              slide.querySelector(".faq-content").style.transform =
+                "translateY(0)";
+              slide.querySelector(".exit-link").style.opacity = "1";
+
+              // Auto-open FAQ questions with delay
+              const faqQuestions = slide.querySelectorAll(".faq-question");
+              faqQuestions.forEach((question, index) => {
+                setTimeout(() => {
+                  question.classList.add("active");
+                  question.nextElementSibling.classList.add("show");
+                }, 1000 + index * 200); // Staggered delay for each question
+              });
+            }, 50);
+            dotsContainer.style.opacity = "0";
+          } else {
+            content.classList.remove("zoomed-in");
+            content.classList.add("zoomed-out");
+            slidesContainer.style.transform =
+              translateX + " translateZ(-1000px)";
+
+            slide.querySelector(".faq-content").style.opacity = "0";
+            slide.querySelector(".faq-content").style.transform =
+              "translateY(20px)";
+            slide.querySelector(".exit-link").style.opacity = "0";
+            setTimeout(() => {
+              slide.querySelector(".faq-content").style.display = "none";
+              // Close all FAQ questions
+              slide.querySelectorAll(".faq-question").forEach((question) => {
+                question.classList.remove("active");
+                question.nextElementSibling.classList.remove("show");
+              });
+
+              dotsContainer.style.opacity = "1";
+            }, 500); // Match this delay with the CSS transition duration
+          }
+        }
+
         // Handle keyboard navigation
         document.addEventListener("keydown", (e) => {
-          const currentSlideElement = slides[currentSlide];
-          if (
-            e.key === "Escape" &&
-            currentSlideElement.classList.contains("zoomed")
-          ) {
-            zoomSlide(currentSlideElement, false);
-          } 
-          if (e.key === "ArrowRight" && !currentSlideElement.classList.contains("zoomed")) {
+          if (e.key === "Escape" && isZoomed) {
+            toggleZoom(slides[currentSlide]);
+          }
+          if (e.key === "ArrowRight" && !isZoomed) {
             scrollToSlide(Math.max(0, currentSlide - 1));
-          } 
-          if (e.key === "ArrowLeft" && !currentSlideElement.classList.contains("zoomed")) {
+          }
+          if (e.key === "ArrowLeft" && !isZoomed) {
             scrollToSlide(Math.min(slides.length - 1, currentSlide + 1));
-          } 
-          if (e.key === " ") {
-            if (currentSlideElement.classList.contains("zoomed")) {
-              revealNextMorphGroup(currentSlideElement);
+          }
+          if (e.key === " " || e.key === "Enter") {
+            if (isZoomed) {
+              // Toggle the first unopened FAQ item
+              const currentSlideElement = slides[currentSlide];
+              const unopenedItem = currentSlideElement.querySelector(
+                ".faq-answer:not(.show)"
+              );
+              if (unopenedItem) {
+                unopenedItem.classList.add("show");
+              } else {
+                toggleZoom(currentSlideElement);
+              }
             } else {
-              zoomSlide(currentSlideElement, true);
-            }
-          } 
-          if (e.key === "Enter") {
-            if (currentSlideElement.classList.contains("zoomed")) {
-              revealNextMorphGroup(currentSlideElement);
-            } else {
-              zoomSlide(currentSlideElement, true);
+              toggleZoom(slides[currentSlide]);
             }
           }
         });
@@ -398,6 +1088,7 @@
         // Initial setup
         scrollToSlide(0);
 
+        // Background animations (keep your existing code here)
         const backgroundAnimations = document.querySelector(
           ".background-animations"
         );
@@ -406,7 +1097,6 @@
         const keywords = [
           "السمسرة",
           "الأسهم",
-          "تعاريف",
           "أسواق الأسهم",
           "أسواق الأولية",
           "أسواق الثانوية",
@@ -424,8 +1114,14 @@
 
         const keywordContainers = [];
         const gridSize = 5; // 5x5 grid
-        const cellWidth = window.innerWidth / gridSize;
-        const cellHeight = window.innerHeight / gridSize;
+        let cellWidth, cellHeight;
+
+        function updateCellSize() {
+          cellWidth = window.innerWidth / gridSize;
+          cellHeight = window.innerHeight / gridSize;
+        }
+
+        updateCellSize();
 
         for (let i = 0; i < gridSize * gridSize; i++) {
           const container = document.createElement("div");
@@ -439,22 +1135,29 @@
           container.appendChild(symbol);
           backgroundAnimations.appendChild(container);
           keywordContainers.push(container);
-
-          const row = Math.floor(i / gridSize);
-          const col = i % gridSize;
-          const x = col * cellWidth + Math.random() * (cellWidth - 100);
-          const y = row * cellHeight + Math.random() * (cellHeight - 100);
-
-          container.style.top = `${y}px`;
-          container.style.left = `${x}px`;
         }
 
         function moveKeywords() {
+          const padding = 20; // Padding from the viewport edges
           keywordContainers.forEach((container, index) => {
             const row = Math.floor(index / gridSize);
             const col = index % gridSize;
-            const x = col * cellWidth + Math.random() * (cellWidth - 100);
-            const y = row * cellHeight + Math.random() * (cellHeight - 100);
+            const x = Math.min(
+              Math.max(
+                col * cellWidth +
+                  Math.random() * (cellWidth - container.offsetWidth),
+                padding
+              ),
+              window.innerWidth - container.offsetWidth - padding
+            );
+            const y = Math.min(
+              Math.max(
+                row * cellHeight +
+                  Math.random() * (cellHeight - container.offsetHeight),
+                padding
+              ),
+              window.innerHeight - container.offsetHeight - padding
+            );
 
             container.style.top = `${y}px`;
             container.style.left = `${x}px`;
@@ -479,8 +1182,7 @@
         const lines = [];
         for (let i = 0; i < dots.length; i++) {
           for (let j = i + 1; j < dots.length; j++) {
-            if (Math.random() < 0.2) {
-              // Reduced line density
+            if (Math.random() < 0.15) {
               const line = document.createElement("div");
               line.classList.add("network-line");
               network.appendChild(line);
@@ -510,22 +1212,10 @@
           lines.forEach(({ line, start, end }) => {
             const rect1 = start.getBoundingClientRect();
             const rect2 = end.getBoundingClientRect();
-            const x1 = Math.min(
-              Math.max(rect1.left, padding),
-              window.innerWidth - padding
-            );
-            const y1 = Math.min(
-              Math.max(rect1.top, padding),
-              window.innerHeight - padding
-            );
-            const x2 = Math.min(
-              Math.max(rect2.left, padding),
-              window.innerWidth - padding
-            );
-            const y2 = Math.min(
-              Math.max(rect2.top, padding),
-              window.innerHeight - padding
-            );
+            const x1 = rect1.left + rect1.width / 2;
+            const y1 = rect1.top + rect1.height / 2;
+            const x2 = rect2.left + rect2.width / 2;
+            const y2 = rect2.top + rect2.height / 2;
 
             const angle = Math.atan2(y2 - y1, x2 - x1);
             const length = Math.hypot(x2 - x1, y2 - y1);
@@ -537,18 +1227,31 @@
           });
         }
 
-        // Update network positions periodically
-        setInterval(updateNetworkPositions, 1);
+        // Update network positions more frequently
+        setInterval(updateNetworkPositions, 10);
 
         // Add window resize event listener to update positions
         window.addEventListener("resize", () => {
-          const cellWidth = window.innerWidth / gridSize;
-          const cellHeight = window.innerHeight / gridSize;
+          updateCellSize();
           moveKeywords();
           updateNetworkPositions();
         });
 
+        // Create a canvas element
+        const canvas = document.createElement("canvas");
+        document.body.appendChild(canvas);
+        const ctx = canvas.getContext("2d");
+
+        // Set canvas size
+        function resizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener("resize", resizeCanvas);
+
         // Initial update
+        moveKeywords();
         updateNetworkPositions();
       });
     </script>
